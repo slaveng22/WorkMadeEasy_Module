@@ -12,5 +12,5 @@ New-ModuleManifest -Path $ModulePath `
 -Description "Module for simplifying administrative tasks"`
 -ModuleVersion "1.0.2"`
 -Copyright "(c) 2024 slaveng22. Licensed under MIT License. See LICENSE for details"`
--FunctionsToExport "Get-MyFunction"`
+-FunctionsToExport "Format-Bytes, unzip, Get-WinRShortcut, Open-AsAdmin, Update-Software, Get-RDPHealth, Set-PowerPlan, Get-NetworkInstalledPrinters, Get-LoggedInUserSession, Close-LoggedInUserSession, Get-InstalledSoftwareList, Get-LocalProfiles, Remove-LocalProfile, Get-LargestMailbox, Add-UserToSharedMailbox, Find-SPSOwner, Get-MailboxPermissionList, Find-BitLockerPC, Copy-ADGroupMembership, Get-InactiveUser"`
 -PowerShellVersion 7.0
