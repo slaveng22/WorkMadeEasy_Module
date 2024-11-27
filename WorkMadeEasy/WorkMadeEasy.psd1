@@ -9,7 +9,7 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-# RootModule = ''
+RootModule = 'WorkMadeEasy.psm1'
 
 # Version number of this module.
 ModuleVersion = '1.0.2'
@@ -18,7 +18,7 @@ ModuleVersion = '1.0.2'
 # CompatiblePSEditions = @()
 
 # ID used to uniquely identify this module
-GUID = '5ef7e851-57fa-453a-807d-a7b8e15d3145'
+GUID = '79ddb515-b99a-43e0-a35a-a26e98383a1a'
 
 # Author of this module
 Author = 'slaveng22'
@@ -69,17 +69,16 @@ PowerShellVersion = '7.0'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 
-               'Format-Bytes, unzip, Get-WinRShortcut, Open-AsAdmin, Update-Software, Get-RDPHealth, Set-PowerPlan, Get-NetworkInstalledPrinters, Get-LoggedInUserSession, Close-LoggedInUserSession, Get-InstalledSoftwareList, Get-LocalProfiles, Remove-LocalProfile, Get-LargestMailbox, Add-UserToSharedMailbox, Find-SPSOwner, Get-MailboxPermissionList, Find-BitLockerPC, Copy-ADGroupMembership, Get-InactiveUser'
+FunctionsToExport = '*'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = @()
+CmdletsToExport = '*'
 
 # Variables to export from this module
 VariablesToExport = '*'
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = @()
+AliasesToExport = '*'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
