@@ -970,7 +970,7 @@ function Get-LastUsedDevices {
     $UserID = (Get-MgUser -Filter "userPrincipalName eq '$User'").Id
 
     if (!$UserID) {
-        Write-Host "Device $User not found." -ForegroundColor Red
+        Write-Host "User $User not found." -ForegroundColor Red
         return
     }
 
