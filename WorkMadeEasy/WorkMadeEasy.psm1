@@ -968,9 +968,16 @@ function Get-LastUsedDevices {
     }
 
     $UserID = (Get-MgUser -Filter "userPrincipalName eq '$User'").Id
+
+    if (!$UserID) {
+        Write-Host "Device $User not found." -ForegroundColor Red
+        return
+    }
+
+
     $RegisteredDevices = Get-MgUserRegisteredDevice -UserId $UserID -All:$true
 
-    $DevicesProperites = $RegisteredDevices | Foreach-Object {
+    $DevicesProperties = $RegisteredDevices | Foreach-Object {
 
         Get-MgDevice -DeviceId $_.Id -Property * | Select-Object DisplayName, OperatingSystem, OperatingSystemVersion, ApproximateLastSignInDateTime 
 
@@ -980,7 +987,7 @@ function Get-LastUsedDevices {
     Write-Host "User $User last used devices:" -ForegroundColor Green
     Write-Host ""
     Write-Host "--------------------------------------------------------------------------------------------------------------" -ForegroundColor Green
-    $DevicesProperites | Sort-Object -Property ApproximateLastSignInDateTime -Descending | Select-Object -First 5
+    $DevicesProperties | Sort-Object -Property ApproximateLastSignInDateTime -Descending | Select-Object -First 5
 
 }
 
