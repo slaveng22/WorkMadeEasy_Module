@@ -15,15 +15,15 @@ function Format-Bytes {
     #>
     
     param([int64]$Bytes)
-        if ($Bytes -lt 1000) { return "$Bytes bytes" }
-        $Bytes /= 1000
-        if ($Bytes -lt 1000) { return "$($Bytes)KB" }
-        $Bytes /= 1000
-        if ($Bytes -lt 1000) { return "$($Bytes)MB" }
-        $Bytes /= 1000
-        if ($Bytes -lt 1000) { return "$($Bytes)GB" }
-        $Bytes /= 1000
-        return "$($Bytes)TB"
+    if ($Bytes -lt 1000) { return "$Bytes bytes" }
+    $Bytes /= 1000
+    if ($Bytes -lt 1000) { return "$($Bytes)KB" }
+    $Bytes /= 1000
+    if ($Bytes -lt 1000) { return "$($Bytes)MB" }
+    $Bytes /= 1000
+    if ($Bytes -lt 1000) { return "$($Bytes)GB" }
+    $Bytes /= 1000
+    return "$($Bytes)TB"
 }
 
 #----------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ function unzip {
     $DestinationPath = Split-Path -Path $file
     if ([string]::IsNullOrEmpty($DestinationPath)) {
         
-        $DestinationPath=$PWD
+        $DestinationPath = $PWD
     }
 
     if (Test-Path ($File)) {
@@ -59,8 +59,9 @@ function unzip {
         Write-Output "Extracting $File to $DestinationPath"
         Expand-Archive -Path $File -DestinationPath $DestinationPath
 
-    }else {
-        $FileName=Split-Path $File -leaf
+    }
+    else {
+        $FileName = Split-Path $File -leaf
         Write-Output "File $FileName does not exist"
     }  
 
@@ -95,52 +96,52 @@ function Get-WinRShortcut {
 
     $shortcuts = @{
 
-"msconfig" = "System Settings, Manage Services, Boot in Safe Mode";
-"msinfo32" = "System Information";
-"sysdm.cpl" = "System Properties, Rename PC, Add to Domain, Remove user profiles, Enable RDP";
-"resmon" = "Resource Monitor";
-"main.cpl" = "Mouse Settings";
-"mstsc" = "Remote Desktop Service";
-"cmd" = "The Command Prompt";
-"certmgr.msc" = "Current User Certificates";
-"explorer" = "Windows Explorer";
-"taskmgr" = "Task Manager";
-"shutdown" = "Windows Shutdown";
-"chkdsk" = "Check Disk Utility";
-"cleanmgr" = "Clean Disk Manager";
-"dxdiag" = "DirectX Options";
-"powershell" = "Windows PowerShell Console";
-"winver" = "Windows Version";
-"control folders" = "Folder Options";
-"diskmgmt.msc" = "Disk Manager Format Disk Resize Volume";
-"eventvwr.msc" = "Event Viewer";
-"gpedit.msc" = "Local Group Policy Editor";
-"secpol.msc" = "Local Security Policy";
-"regedit" = "Registry Editor";
-"powercfg.cpl" = "Power Options";
-"magnify" = "Magnifier";
-"charmap" = "Windows Character Table";
-"ncpa.cpl" = "Network Connections";
-"mrt" = "Malware Removal Tool";
-"devmgmt.msc" = "Device Manager";
-"netplwiz" = "User accounts";
-"services.msc" = "Services";
-"appwiz.cpl" = "Programs and Components";
-"control" = "Control Panel";
-"." = "Open the folder of the current user";
-"osk" = "On-Screen Keyboard";
-"snippingtool" = "Screenshot Tool";
-"mdsched" = "Windows memory checker";
-"Outlook /cleanviews" = "Resets view on Outlook";
-"psr" = "Steps recorder";
-"mmc" = "Microsoft Management Console";
-"lusrmgr.msc" = "Local Users and Groups";
+        "msconfig"            = "System Settings, Manage Services, Boot in Safe Mode";
+        "msinfo32"            = "System Information";
+        "sysdm.cpl"           = "System Properties, Rename PC, Add to Domain, Remove user profiles, Enable RDP";
+        "resmon"              = "Resource Monitor";
+        "main.cpl"            = "Mouse Settings";
+        "mstsc"               = "Remote Desktop Service";
+        "cmd"                 = "The Command Prompt";
+        "certmgr.msc"         = "Current User Certificates";
+        "explorer"            = "Windows Explorer";
+        "taskmgr"             = "Task Manager";
+        "shutdown"            = "Windows Shutdown";
+        "chkdsk"              = "Check Disk Utility";
+        "cleanmgr"            = "Clean Disk Manager";
+        "dxdiag"              = "DirectX Options";
+        "powershell"          = "Windows PowerShell Console";
+        "winver"              = "Windows Version";
+        "control folders"     = "Folder Options";
+        "diskmgmt.msc"        = "Disk Manager Format Disk Resize Volume";
+        "eventvwr.msc"        = "Event Viewer";
+        "gpedit.msc"          = "Local Group Policy Editor";
+        "secpol.msc"          = "Local Security Policy";
+        "regedit"             = "Registry Editor";
+        "powercfg.cpl"        = "Power Options";
+        "magnify"             = "Magnifier";
+        "charmap"             = "Windows Character Table";
+        "ncpa.cpl"            = "Network Connections";
+        "mrt"                 = "Malware Removal Tool";
+        "devmgmt.msc"         = "Device Manager";
+        "netplwiz"            = "User accounts";
+        "services.msc"        = "Services";
+        "appwiz.cpl"          = "Programs and Components";
+        "control"             = "Control Panel";
+        "."                   = "Open the folder of the current user";
+        "osk"                 = "On-Screen Keyboard";
+        "snippingtool"        = "Screenshot Tool";
+        "mdsched"             = "Windows memory checker";
+        "Outlook /cleanviews" = "Resets view on Outlook";
+        "psr"                 = "Steps recorder";
+        "mmc"                 = "Microsoft Management Console";
+        "lusrmgr.msc"         = "Local Users and Groups";
     }    
     
     # Filter the shortcuts based on the description
     $filteredShortcuts = $shortcuts.GetEnumerator() | Where-Object { $_.Value -like "*$Filter*" }
 
-        foreach ($item in $filteredShortcuts) {
+    foreach ($item in $filteredShortcuts) {
         Write-Host "`nShortcut: " -NoNewline
         Write-Host $item.Key -NoNewline -ForegroundColor Green
         Write-Host "`nDescription: " -NoNewline
@@ -157,11 +158,13 @@ function Get-WinRShortcut {
                 $cmd = $splitCommand[0]
                 $arglst = $splitCommand[1]
                 Start-Process -FilePath $cmd -ArgumentList $arglst
-            } else {
+            }
+            else {
                 
                 Invoke-Expression $command
             }
-        } else {
+        }
+        else {
             
             Start-Process -FilePath $command
         }
@@ -189,7 +192,8 @@ function Open-AsAdmin {
     if ($args.Count -gt 0) {   
         $argList = @("powershell.exe", "-NoExit") + $args
         Start-Process "wt.exe" -Verb runAs -ArgumentList $argList
-    } else {
+    }
+    else {
         Start-Process "wt.exe" -Verb runAs -ArgumentList "powershell.exe -NoExit"
     }
 }
@@ -216,33 +220,38 @@ function Update-Software {
         $ComputerName
     )
 
-    if ($ComputerName){
-        $cred=Get-Credential
+    if ($ComputerName) {
+        $cred = Get-Credential
         $s = New-PSSession -ComputerName $ComputerName -Credential $cred
 
         Invoke-Command -Session $s -ScriptBlock {
-            if (!(Get-AppxPackage Microsoft.DesktopAppInstaller)){
-                try {Add-AppPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe}
-                catch {Write-Error "Couldn't install Winget!!!" -Category NotInstalled -RecommendedAction "Try to install from microsoft store!"}
-            }else{
+            if (!(Get-AppxPackage Microsoft.DesktopAppInstaller)) {
+                try { Add-AppPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe }
+                catch { Write-Error "Couldn't install Winget!!!" -Category NotInstalled -RecommendedAction "Try to install from microsoft store!" }
+            }
+            else {
                 try {
                     winget upgrade --all --accept-source-agreements --accept-package-agreements --force --silent
                     Write-Host 'Software updated. Please restart your PC to verify update!' -ForegroundColor Green
-                } catch {
+                }
+                catch {
                     Write-Host 'An error occurred while updating the software.' -ForegroundColor Red
                     Write-Host "Error details: $_" -ForegroundColor Red
                 }                
             }
         }
-    }else {
-        if (!(Get-AppxPackage Microsoft.DesktopAppInstaller)){
-            try {Add-AppPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe}
-            catch {Write-Error "Couldn't install Winget!!!" -Category NotInstalled -RecommendedAction "Try to install from microsoft store!"}
-        }else{
+    }
+    else {
+        if (!(Get-AppxPackage Microsoft.DesktopAppInstaller)) {
+            try { Add-AppPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe }
+            catch { Write-Error "Couldn't install Winget!!!" -Category NotInstalled -RecommendedAction "Try to install from microsoft store!" }
+        }
+        else {
             try {
                 winget upgrade --all --accept-source-agreements --accept-package-agreements --force --silent
                 Write-Host 'Software updated. Please restart your PC to verify update!' -ForegroundColor Green
-            } catch {
+            }
+            catch {
                 Write-Host 'An error occurred while updating the software.' -ForegroundColor Red
                 Write-Host "Error details: $_" -ForegroundColor Red
             }
@@ -372,7 +381,7 @@ function Set-PowerProfile {
         [switch]$Balanced
     )
 
-    if ($BatteryLife){
+    if ($BatteryLife) {
         
         # Batery Life
         $PowerPlan = powercfg -duplicatescheme a1841308-3541-4fab-bc81-f71556f20b4a
@@ -396,7 +405,8 @@ function Set-PowerProfile {
 
         powercfg -setactive $guid
 
-    } elseif($Performance){
+    }
+    elseif ($Performance) {
         
         # Best Performance
         $PowerPlan = powercfg -duplicatescheme 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
@@ -426,11 +436,13 @@ function Set-PowerProfile {
 
         powercfg -setactive $guid
 
-    }elseif ($Balanced) {
+    }
+    elseif ($Balanced) {
 
         # Balanced
         powercfg -setactive 381b4222-f694-41f0-9685-ff5bb260df2e
-    } else {
+    }
+    else {
         Write-Output "Please specify a configuration -BatteryLife, -Performance, or -Balanced."
     }
     
@@ -458,18 +470,19 @@ function Get-NetworkInstalledPrinters {
         [string]$ComputerName
     )
     
-    if ($ComputerName){
+    if ($ComputerName) {
         Invoke-Command -ComputerName $ComputerName -ScriptBlock {  
             $InstalledPrinters = Get-ChildItem "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Print\Connections"  
             $InstalledPrinters | Add-Member -Name 'PrinterName' -MemberType NoteProperty -Value ""  
             Foreach ($InstalledPrinter in $InstalledPrinters) { $InstalledPrinter.PrinterName = $InstalledPrinter.GetValue("Printer").split("\")[3] }  
             Return $InstalledPrinters | Sort-Object PrinterName | Select-Object PSComputerName, PrinterName  
         }
-    }else {
+    }
+    else {
         $InstalledPrinters = Get-ChildItem "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Print\Connections"  
-            $InstalledPrinters | Add-Member -Name 'PrinterName' -MemberType NoteProperty -Value ""  
-            Foreach ($InstalledPrinter in $InstalledPrinters) { $InstalledPrinter.PrinterName = $InstalledPrinter.GetValue("Printer").split("\")[3] }  
-            Return $InstalledPrinters | Sort-Object PrinterName | Select-Object PrinterName
+        $InstalledPrinters | Add-Member -Name 'PrinterName' -MemberType NoteProperty -Value ""  
+        Foreach ($InstalledPrinter in $InstalledPrinters) { $InstalledPrinter.PrinterName = $InstalledPrinter.GetValue("Printer").split("\")[3] }  
+        Return $InstalledPrinters | Sort-Object PrinterName | Select-Object PrinterName
 
     }
 }
@@ -493,9 +506,10 @@ function Get-LoggedInUserSession {
     param (
         [string]$ComputerName
     )
-    if ($ComputerName){
+    if ($ComputerName) {
         quser /server:$ComputerName
-    }else {
+    }
+    else {
         quser
     }
 }
@@ -518,9 +532,10 @@ function Close-LoggedInUserSession {
         [string]$UserSessionID,
         [string]$ComputerName
     )
-    if ($ComputerName){
-    Logoff $UserSessionID /server:$ComputerName
-    }else{
+    if ($ComputerName) {
+        Logoff $UserSessionID /server:$ComputerName
+    }
+    else {
         Logoff $UserSessionID
     }
 }
@@ -577,9 +592,10 @@ function Get-LocalProfiles {
         [System.Management.Automation.Credential()]
         $Credentials = [System.Management.Automation.PSCredential]::Empty 
     )
-    if ($ComputerName){
-    Invoke-Command -ComputerName $ComputerName -Credential $Credentials -ScriptBlock { Get-CimInstance -ClassName win32_userprofile } | Select-Object localpath, sid
-    }else{
+    if ($ComputerName) {
+        Invoke-Command -ComputerName $ComputerName -Credential $Credentials -ScriptBlock { Get-CimInstance -ClassName win32_userprofile } | Select-Object localpath, sid
+    }
+    else {
         Get-CimInstance -ClassName win32_userprofile | Select-Object localpath, sid
     }
 }
@@ -613,7 +629,7 @@ function Remove-LocalProfile {
         [System.Management.Automation.Credential()]
         $Credentials = [System.Management.Automation.PSCredential]::Empty
     )
-    if ($ComputerName){
+    if ($ComputerName) {
         Invoke-Command -ComputerName $ComputerName -Credential $Credentials -ScriptBlock {
             param($UserProfile)
         
@@ -638,7 +654,8 @@ function Remove-LocalProfile {
                 Write-Host "An error occurred: $_"
             }
         } -ArgumentList $UserProfile
-    }else {
+    }
+    else {
         $path = (Get-CimInstance -ClassName win32_userprofile | Where-Object { $_.localPath -like "*$UserProfile" }).localPath
         $elements = $path.Split('\')
         $UserName = $elements[-1]
@@ -681,7 +698,7 @@ function Get-LargestMailbox {
     #>
 
     # Check do you have Exchange module, if not install it.
-    If (!(Get-Module -ListAvailable| Where-Object { $_.name -like "*ExchangeOnlineManagement*" })) {
+    If (!(Get-Module -ListAvailable | Where-Object { $_.name -like "*ExchangeOnlineManagement*" })) {
         try {
             Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force -ErrorAction SilentlyContinue
         }
@@ -694,14 +711,14 @@ function Get-LargestMailbox {
     }    
 
     # Check are you connected to Exchange Online, if not connect.
-    if (!(Get-ConnectionInformation)){
+    if (!(Get-ConnectionInformation)) {
         Connect-ExchangeOnline -ShowBanner: $false
-        }
+    }
     
     Get-Mailbox -ResultSize Unlimited |
     Get-MailboxStatistics |
     Select-Object DisplayName,
-    @{name="TotalItemSize (GB)";expression={[math]::Round((($_.TotalItemSize.Value.ToString()).Split("(")[1].Split(" ")[0].Replace(",","")/1GB),2)}} |
+    @{name = "TotalItemSize (GB)"; expression = { [math]::Round((($_.TotalItemSize.Value.ToString()).Split("(")[1].Split(" ")[0].Replace(",", "") / 1GB), 2) } } |
     Sort-Object "TotalItemSize (GB)" -Descending |
     Select-Object -first 10
 
@@ -729,7 +746,7 @@ function Add-UserToSharedMailbox {
     )
 
     # Check do you have Exchange module, if not install it.
-    If (!(Get-Module -ListAvailable| Where-Object { $_.name -like "*ExchangeOnlineManagement*" })) {
+    If (!(Get-Module -ListAvailable | Where-Object { $_.name -like "*ExchangeOnlineManagement*" })) {
         try {
             Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force -ErrorAction SilentlyContinue
         }
@@ -742,9 +759,9 @@ function Add-UserToSharedMailbox {
     }    
 
     # Check are you connected to Exchange Online, if not connect.
-    if (!(Get-ConnectionInformation)){
+    if (!(Get-ConnectionInformation)) {
         Connect-ExchangeOnline -ShowBanner: $false
-        }
+    }
     #AddUser Full Permissions to mailbox
     ADD-MailboxPermission -Identity $Mailbox -User $User -AccessRights FullAccess -AutoMapping: $false
     #Add User send as permission to mailbox
@@ -829,7 +846,7 @@ function Get-MailboxPermissionList {
     )
 
     # Check do you have Exchange module, if not install it.
-    If (!(Get-Module -ListAvailable| Where-Object { $_.name -like "*ExchangeOnlineManagement*" })) {
+    If (!(Get-Module -ListAvailable | Where-Object { $_.name -like "*ExchangeOnlineManagement*" })) {
         try {
             Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force -ErrorAction SilentlyContinue
         }
@@ -842,8 +859,8 @@ function Get-MailboxPermissionList {
     }       
 
     # Check if you are connected to Exchange online, if not connect.
-    if (!(Get-ConnectionInformation)){
-    Connect-ExchangeOnline -ShowBanner: $false
+    if (!(Get-ConnectionInformation)) {
+        Connect-ExchangeOnline -ShowBanner: $false
     }
     # Get a list of mailboxes
     $mailboxes = Get-Mailbox -ResultSize Unlimited
@@ -866,7 +883,7 @@ function Get-MailboxPermissionList {
 
 function Get-DeviceOwner {
 
-        <#
+    <#
         .SYNOPSIS
         Find who is owner of device
         .DESCRIPTION
@@ -968,6 +985,54 @@ function Get-LastUsedDevices {
 }
 
 
+#----------------------------------------------------------------------------------------
+# Get-AllSharedMailboxesPermissions
+#----------------------------------------------------------------------------------------
+
+function Get-AllSharedMailboxesPermissions {
+
+    <#
+    .SYNOPSIS
+    Creates a list of all shared mailboxes and users who have full access to them
+    .DESCRIPTION
+    Cycles trouge each shared mailbox, Full Access permission on this mailbox and creates a report
+    .EXAMPLE
+    Get-AllSharedMailboxesPermissions
+#>
+
+
+    # Check do you have Exchange module, if not install it.
+    If (!(Get-Module -ListAvailable | Where-Object { $_.name -like "*ExchangeOnlineManagement*" })) {
+        try {
+            Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force -ErrorAction SilentlyContinue
+        }
+        catch {
+            Write-Error -Message "Exchange Online Management module can't be installed. Try to install module manually and run command again"
+        }       
+    }
+    else {
+        Import-Module ExchangeOnlineManagement -ErrorAction SilentlyContinue  
+    }    
+
+    # Check are you connected to Exchange Online, if not connect.
+    if (!(Get-ConnectionInformation)) {
+        Connect-ExchangeOnline -ShowBanner: $false
+    }
+
+    # Get all moailboxes and generate report
+    $mailboxes = Get-Mailbox -ResultSize Unlimited -Filter ('RecipientTypeDetails -eq "SharedMailbox"')
+    foreach ($m in $mailboxes) { 
+        Write-Host "Users that have permissions to $($m.UserPrincipalName)" -ForegroundColor Green
+        Write-Host "----------------------------------------------------------------------------------------" -ForegroundColor Green
+        Get-MailboxPermission -Identity $m.UserPrincipalName -ResultSize Unlimited | `
+            Where-Object { ($_.IsInherited -eq $false) -and ($_.User -ne "NT AUTHORITY\SELF") } | `
+            Select-Object Identity, User, AccessRights | Format-Table 
+
+    }
+
+}
+
+
 # ACTIVE DIRECTORY
 
 #----------------------------------------------------------------------------------------
@@ -992,7 +1057,7 @@ function Find-BitLockerPC {
 
     [CmdletBinding()]
     Param (
-        [string]$SearchBase=(Get-ADDomain).DistinguishedName,
+        [string]$SearchBase = (Get-ADDomain).DistinguishedName,
         [string]$ReportPath = $(Join-Path (Split-Path $MyInvocation.MyCommand.Path) -ChildPath "WorkstationsWithBitLocker.csv")
     )
     #AD module is not necessary in my current environment. Uncomment if you change environment
@@ -1040,7 +1105,7 @@ function Copy-ADGroupMembership {
         [Parameter(Position = 1, Mandatory = $true)]
         $DestinationGroup
     )
-    Get-ADGroupMember -Identity $SourceGroup | ForEach-Object {Add-ADGroupMember -Identity $DestinationGroup -Members $_.distinguishedName}
+    Get-ADGroupMember -Identity $SourceGroup | ForEach-Object { Add-ADGroupMember -Identity $DestinationGroup -Members $_.distinguishedName }
 }
 
 
@@ -1081,8 +1146,9 @@ function Get-InactiveUsers {
 
     if ($IncludeDisabled.IsPresent) {
         $Users = Get-ADUser -Filter * -SearchBase $SearchBase -Properties LastLogonTimestamp
-    } else {
-        $Users = Get-ADUser -Filter {Enabled -eq $true} -SearchBase $SearchBase -Properties LastLogonTimestamp
+    }
+    else {
+        $Users = Get-ADUser -Filter { Enabled -eq $true } -SearchBase $SearchBase -Properties LastLogonTimestamp
     }
     
     $CutOffDate = (Get-Date).AddMonths(-$MonthsSinceLastLogin)
@@ -1095,7 +1161,8 @@ function Get-InactiveUsers {
         
         if ($null -eq $LastLogon) {
             Write-Output "$($u.Name) has never logged in!"
-        } elseif ($LastLogon -le $CutOffDate) {
+        }
+        elseif ($LastLogon -le $CutOffDate) {
             Write-Output "$($u.Name) hasn't logged in since $($LastLogon)"
         }
     }
