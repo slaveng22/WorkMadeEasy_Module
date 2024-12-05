@@ -860,6 +860,114 @@ function Get-MailboxPermissionList {
 
 }
 
+#----------------------------------------------------------------------------------------
+# Get-DeviceOwner
+#----------------------------------------------------------------------------------------
+
+function Get-DeviceOwner {
+
+        <#
+        .SYNOPSIS
+        Find who is owner of device
+        .DESCRIPTION
+        List all users that have logged in to Microsoft 365 to specific device.
+        .EXAMPLE
+        Get-DeviceOwner -ComputerName PC01
+
+    #>
+
+    param (
+        [parameter(mandatory = $true)]
+        [string]$ComputerName
+    )
+    
+    # Connect to MS Graph
+    $scopes = (Get-MgContext | Select-Object -ExpandProperty Scopes)
+    if (!($scopes -contains 'Directory.Read.All' -and $scopes -contains 'Device.Read.All' -and $scopes -contains 'User.Read.All')) {
+        Connect-MgGraph -Scopes Directory.Read.All, Device.Read.All, User.Read.All -NoWelcome
+    }
+
+    $Devices = Get-MgDevice -Filter "DisplayName eq '$ComputerName'" -Property *
+    if (!$Devices) {
+        Write-Host "Device $ComputerName not found." -ForegroundColor Red
+        return
+    }
+
+    $AllRegisteredUsers = @()
+    $Devices | ForEach-Object {
+    
+        $RegisteredUsers = Get-MgDeviceRegisteredUser -DeviceId $_.Id
+        $AllRegisteredUsers += $RegisteredUsers
+
+    }
+
+    $UserNames = @()
+    $AllRegisteredUsers | ForEach-Object {
+
+        $UserName = Get-MgUser -UserId $_.Id
+        $UserNames += $UserName
+
+    }
+
+    if ($AllRegisteredUsers) {
+        Write-Host "Users associated with device $ComputerName" -ForegroundColor Green
+        Write-Host "--------------------------------------------------------------------------------"
+        $UserNames | ForEach-Object {
+            Write-Host "User: $($_.DisplayName) ($($_.UserPrincipalName))"
+            Write-Host "--------------------------------------------------------------------------------"
+        }
+    }
+    else {
+        Write-Host "No users found for device $ComputerName" -ForegroundColor Yellow
+    }
+
+}
+
+#----------------------------------------------------------------------------------------
+# Get-LastUsedDevices
+#----------------------------------------------------------------------------------------
+
+function Get-LastUsedDevices {
+
+    <#
+        .SYNOPSIS
+        Find last 5 devices, user has been logged in to
+        .DESCRIPTION
+        List all 5 devices to which specific user has been logged in to. Gives info about PC OS, and time when user logged in to PC
+        .EXAMPLE
+        Get-LastUsedDevices -User user@contoso.com
+
+    #>
+
+    param (
+        [parameter(mandatory = $true)]
+        $User
+    )
+    
+
+    $scopes = (Get-MgContext | Select-Object -ExpandProperty Scopes)
+    if (!($scopes -contains 'User.Read.All' -and $scopes -contains 'Device.Read.All')) {
+        Connect-MgGraph -Scopes User.Read.All, Device.Read.All -NoWelcome
+    }
+
+    $UserID = (Get-MgUser -Filter "userPrincipalName eq '$User'").Id
+    $RegisteredDevices = Get-MgUserRegisteredDevice -UserId $UserID -All:$true
+
+    $DevicesProperites = $RegisteredDevices | Foreach-Object {
+
+        Get-MgDevice -DeviceId $_.Id -Property * | Select-Object DisplayName, OperatingSystem, OperatingSystemVersion, ApproximateLastSignInDateTime 
+
+    }
+
+
+    Write-Host "User $User last used devices:" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "--------------------------------------------------------------------------------------------------------------" -ForegroundColor Green
+    $DevicesProperites | Sort-Object -Property ApproximateLastSignInDateTime -Descending | Select-Object -First 5
+
+}
+
+
 # ACTIVE DIRECTORY
 
 #----------------------------------------------------------------------------------------
