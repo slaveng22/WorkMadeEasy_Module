@@ -70,6 +70,57 @@ function unzip {
 # WINDOWS
 
 #----------------------------------------------------------------------------------------
+# Get-TerminalCheatsheeet
+#----------------------------------------------------------------------------------------
+
+function Get-TerminalCheatsheeet {
+    <#
+        .SYNOPSIS
+        List Windows Terminal Shortcuts
+        .DESCRIPTION
+        This command will list all important Windows Terminal shortcut. You can filter them with -Filter.
+        .EXAMPLE
+        Get-TerminalCheatsheeet
+        .EXAMPLE
+        Get-TerminalCheatsheeet -Filter "Split"
+        .EXAMPLE
+        Get-TerminalCheatsheeet -Filter "SHIFT"
+    #>
+    param (
+        [Parameter()]
+        [string]$Filter
+    )
+
+    $table = New-Object System.Data.DataTable
+
+    [void]$table.Columns.Add("Shortcut")
+    [void]$table.Columns.Add("Action")
+
+    [void]$table.Rows.Add("CTRL+SHIFT+F", "Find")
+    [void]$table.Rows.Add("CTRL+SHIFT+D", "Duplicate tab")
+    [void]$table.Rows.Add("CTRL+SHIFT+T", "New tab")
+    [void]$table.Rows.Add("CTRL+TAB", "Next tab")
+    [void]$table.Rows.Add("CTRL+SHIFT+TAB", "Previous tab")
+    [void]$table.Rows.Add("ALT+SHIFT+D ", "Duplicate pane (vertically)")
+    [void]$table.Rows.Add("ALT+SHIFT++", "Split vertically (Doesn't work with NUM)")
+    [void]$table.Rows.Add("ALT+SHIFT+-", "Split horizontally (Doesn't work with NUM)")
+    [void]$table.Rows.Add("ALT+SHIFT+Left or right arrow key", "Resize vertical pane")
+    [void]$table.Rows.Add("ALT+SHIFT+Up or down arrow key", "Resize horizontal pane")
+    [void]$table.Rows.Add("ALT+Arrow keys", "Move between panes")
+    [void]$table.Rows.Add("CTRL+SHIFT+W", "Close pane, tab or window")
+    
+    if ($Filter) {
+        $table | Where-Object { $_.Action -match $Filter -or $_.Shortcut -match $Filter }
+
+    }
+    else {
+
+        $table
+    }
+
+}
+
+#----------------------------------------------------------------------------------------
 # Get-WinRShortcut
 #----------------------------------------------------------------------------------------
 
@@ -458,7 +509,7 @@ function Get-NetworkInstalledPrinters {
         List all Network installed printers.
         .DESCRIPTION
         This command will provide a list of all network installed printers on local PC or on specified remote computer.
-        Command only list printers which are added from print server.
+        Command only list printers which are added from print server with Computer GPO.
         .EXAMPLE
         Get-NetworkInstalledPrinters
         .EXAMPLE
@@ -1002,7 +1053,7 @@ function Get-AllSharedMailboxesPermissions {
     .SYNOPSIS
     Creates a list of all shared mailboxes and users who have full access to them
     .DESCRIPTION
-    Cycles trouge each shared mailbox, Full Access permission on this mailbox and creates a report
+    Cycles trough each shared mailbox, Full Access permission on this mailbox and creates a report
     .EXAMPLE
     Get-AllSharedMailboxesPermissions
 #>
@@ -1026,7 +1077,7 @@ function Get-AllSharedMailboxesPermissions {
         Connect-ExchangeOnline -ShowBanner: $false
     }
 
-    # Get all moailboxes and generate report
+    # Get all mailboxes and generate report
     $mailboxes = Get-Mailbox -ResultSize Unlimited -Filter ('RecipientTypeDetails -eq "SharedMailbox"')
     foreach ($m in $mailboxes) { 
         Write-Host "Users that have permissions to $($m.UserPrincipalName)" -ForegroundColor Green
@@ -1174,8 +1225,6 @@ function Get-InactiveUsers {
         }
     }
 }
-
-
 
 #----------------------------------------------------------------------------------------
 # TO BE CONTINUED
