@@ -542,7 +542,6 @@ function Get-NetworkInstalledPrinters {
 # Get-LoggedInUserSession Close-LoggedInUserSession
 #----------------------------------------------------------------------------------------
 function Get-LoggedInUserSession {
-
     <#
         .SYNOPSIS
         List all logged in users
@@ -557,12 +556,40 @@ function Get-LoggedInUserSession {
     param (
         [string]$ComputerName
     )
-    if ($ComputerName) {
+
+    $output = if ($ComputerName) {
         quser /server:$ComputerName
-    }
-    else {
+    } else {
         quser
     }
+
+    if ($output -match "No user exists") {
+        Write-Output "No users are currently logged in."
+        return
+    }
+
+    $lines = $output -split "`n"
+    $headers = $lines[0] -split "\s{2,}"
+    $users = @()
+
+    for ($i = 1; $i -lt $lines.Length; $i++) {
+        $line = $lines[$i]
+        if ($line -match "^\s*(\S+)\s+(\S+)?\s+(\d+)\s+(\S+)\s+(\S+)\s+(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2})\s*$") {
+            $user = [PSCustomObject]@{
+                USERNAME    = $matches[1]
+                SESSIONNAME = if ($matches[2]) { $matches[2] } else { "" }
+                ID          = $matches[3]
+                STATE       = $matches[4]
+                IDLE_TIME   = $matches[5]
+                LOGON_TIME  = $matches[6]
+            }
+            $users += $user
+        } else {
+            Write-Output "Unexpected line format: $line"
+        }
+    }
+
+    return $users
 }
 
 function Close-LoggedInUserSession {
