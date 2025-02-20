@@ -1,4 +1,19 @@
 # DATA MANIPULATION
+#----------------------------------------------------------------------------------------
+# Get-RandomPIN
+#----------------------------------------------------------------------------------------
+function Get-RandomPIN {
+    <#
+        .SYNOPSIS
+        Get random 4 digits number
+        .DESCRIPTION
+        Get random 4 digits number to user for pins
+        .EXAMPLE
+        Get-RandomPIN
+    #>
+    return Get-Random -Minimum 1000 -Maximum 9999
+}
+
 
 #----------------------------------------------------------------------------------------
 # Format-Bytes
