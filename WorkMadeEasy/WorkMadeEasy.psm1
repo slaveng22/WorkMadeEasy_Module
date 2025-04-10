@@ -2,14 +2,14 @@
 #----------------------------------------------------------------------------------------
 # Test-PasswordStrenght
 #----------------------------------------------------------------------------------------
-function Test-PasswordComplexity {
+function Test-PasswordStrenght {
     <#
         .SYNOPSIS
         Test password security
         .DESCRIPTION
         Function that tests how secure your password is. Based on how long it would take to brutforce it
         .EXAMPLE
-        Test-PasswordComplexity -Password password123
+        Test-PasswordStrenght -Password password123
     #>
     param (
         [string]$Password
@@ -91,7 +91,7 @@ function Get-RandomPassword {
         $randomPassword = -join ($allCharacters.ToCharArray() | Get-Random -Count $Lenght)
     }
     return $randomPassword
-    Test-PasswordComplexity -Password $randomPassword
+    Test-PasswordStrenght -Password $randomPassword
 }
 
 #----------------------------------------------------------------------------------------
