@@ -1,5 +1,54 @@
 # DATA MANIPULATION
 #----------------------------------------------------------------------------------------
+# Get-RandomPassword
+#----------------------------------------------------------------------------------------
+function Get-RandomPassword {
+    <#
+        .SYNOPSIS
+        Get random password.
+        .DESCRIPTION
+        Get random password. You can specify characters you want to include and password lenght
+        .EXAMPLE
+        Get-RandomPIN -Lenght 14
+        .EXAMPLE
+        Get-RandomPIN -Lenght 20 -LettersOnly
+        .EXAMPLE
+        Get-RandomPIN -Lenght 24 -NoSpecialCharacters
+    #>
+    param(
+    [Parameter(Mandatory = $true)] 
+    [int64]$Lenght,
+
+    [Parameter()]
+    [switch]$LettersOnly,
+    [switch]$NoSpecialCharacters
+
+    )
+    if ($LettersOnly) {
+        $uppercase = -join ((65..90) | Get-Random -Count 6 | ForEach-Object { [char]$_ })
+        $lowercase = -join ((97..122) | Get-Random -Count 6 | ForEach-Object { [char]$_ })
+        $allCharacters = $uppercase + $lowercase
+        $randomPassword = -join ($allCharacters.ToCharArray() | Get-Random -Count $Lenght)        
+    }
+    elseif ($NoSpecialCharacters) {
+        $uppercase = -join ((65..90) | Get-Random -Count 6 | ForEach-Object { [char]$_ })
+        $lowercase = -join ((97..122) | Get-Random -Count 6 | ForEach-Object { [char]$_ })
+        $numbers = -join ((48..57) | Get-Random -Count 6 | ForEach-Object { [char]$_ })
+        $allCharacters = $uppercase + $lowercase + $numbers
+        $randomPassword = -join ($allCharacters.ToCharArray() | Get-Random -Count $Lenght)
+    }
+    else {
+        $uppercase = -join ((65..90) | Get-Random -Count 6 | ForEach-Object { [char]$_ })
+        $lowercase = -join ((97..122) | Get-Random -Count 6 | ForEach-Object { [char]$_ })
+        $numbers = -join ((48..57) | Get-Random -Count 6 | ForEach-Object { [char]$_ })
+        $specialChars = -join ((33..47) + (58..64) + (91..96) + (123..126) | Get-Random -Count 6 | ForEach-Object { [char]$_ })
+        $allCharacters = $uppercase + $lowercase + $numbers + $specialChars
+        $randomPassword = -join ($allCharacters.ToCharArray() | Get-Random -Count $Lenght)
+    }
+    return $randomPassword
+}
+
+#----------------------------------------------------------------------------------------
 # Get-RandomPIN
 #----------------------------------------------------------------------------------------
 function Get-RandomPIN {
