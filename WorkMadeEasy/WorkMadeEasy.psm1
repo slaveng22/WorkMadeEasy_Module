@@ -90,8 +90,8 @@ function Get-RandomPassword {
         $allCharacters = $uppercase + $lowercase + $numbers + $specialChars
         $randomPassword = -join ($allCharacters.ToCharArray() | Get-Random -Count $Lenght)
     }
-    return $randomPassword
     Test-PasswordStrenght -Password $randomPassword
+    return $randomPassword
 }
 
 #----------------------------------------------------------------------------------------
