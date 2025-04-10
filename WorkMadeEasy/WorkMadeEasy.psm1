@@ -1,5 +1,50 @@
 # DATA MANIPULATION
 #----------------------------------------------------------------------------------------
+# Test-PasswordStrenght
+#----------------------------------------------------------------------------------------
+function Test-PasswordComplexity {
+    <#
+        .SYNOPSIS
+        Test password security
+        .DESCRIPTION
+        Function that tests how secure your password is. Based on how long it would take to brutforce it
+        .EXAMPLE
+        Test-PasswordComplexity -Password password123
+    #>
+    param (
+        [string]$Password
+    )
+
+    $minLength = 10
+    $medLength = 15
+    $highLength = 20
+    $hasUppercase = $Password -cmatch '[A-Z]'
+    $hasLowercase = $Password -cmatch '[a-z]'
+    $hasDigit = $Password -cmatch '\d'
+    $hasSpecialChar = $Password -cmatch '[^a-zA-Z\d]'
+
+    $score = 0
+    if ($Password.Length -ge $minLength -and $Password.Length -lt $medLength) { $score++ }
+    if ($Password.Length -ge $medLength) { $score++ }
+    if ($Password.Length -ge $highLength) { $score+=2 }
+    if ($hasUppercase) { $score++ }
+    if ($hasLowercase) { $score++ }
+    if ($hasDigit) { $score++ }
+    if ($hasSpecialChar) { $score++ }
+
+    switch ($score) {
+        0 { Write-Host "Password does not meet complexity requirements." -ForegroundColor Red }
+        1 { Write-Host "Password does not meet complexity requirements." -ForegroundColor Red }
+        2 { Write-Host "Password is very weak." -ForegroundColor Red }
+        3 { Write-Host "Password is weak." -ForegroundColor Red }
+        4 { Write-Host "Password is medium." -ForegroundColor Yellow }
+        5 { Write-Host "Password is strong." -ForegroundColor Green }
+        default { Write-Host "Password is very strong." -ForegroundColor Green }
+    }
+}
+
+
+#----------------------------------------------------------------------------------------
 # Get-RandomPassword
 #----------------------------------------------------------------------------------------
 function Get-RandomPassword {
@@ -46,6 +91,7 @@ function Get-RandomPassword {
         $randomPassword = -join ($allCharacters.ToCharArray() | Get-Random -Count $Lenght)
     }
     return $randomPassword
+    Test-PasswordComplexity -Password $randomPassword
 }
 
 #----------------------------------------------------------------------------------------
